@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>ДЛЯ МОЕЙ КЛУБНИЧКИ 🍓</title>
+    <style>
+        :root {
+            --violet: #e0b0ff; /* Тот самый светло-фиолетовый */
+            --dark-violet: #9400d3;
+            --hot-pink: #ff1493;
+            --lemon: #fbff00;
+        }
+
+        body {
+            /* Поменяли фон на светло-фиолетовый градиент */
+            background: linear-gradient(135deg, #f3e5f5 0%, #e0b0ff 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .bg-heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 20px;
+            animation: float 10s infinite linear;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        h1 { 
+            color: white; 
+            text-shadow: 3px 3px 0px var(--dark-violet);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .score { 
+            font-size: 28px; 
+            background: white;
+            padding: 10px 25px;
+            border-radius: 50px;
+            color: var(--dark-violet);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            border: 3px solid var(--violet);
+            font-weight: bold;
+        }
+
+        #game-container {
+            position: relative;
+            width: 90vw;
+            max-width: 500px;
+            height: 60vh;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            border: 6px dashed var(--dark-violet);
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        #taeju {
+            position: absolute;
+            width: 130px; 
+            height: auto;
+            cursor: pointer;
+            filter: drop-shadow(0 0 10px var(--dark-violet));
+            transition: transform 0.1s, left 0.3s ease-out, top 0.3s ease-out;
+            z-index: 10;
+            display: block;
+        }
+
+        #win-screen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            /* Финальный экран тоже в её любимом цвете */
+            background: radial-gradient(circle, #e0b0ff, #9400d3);
+            z-index: 100;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .win-content {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 30px;
+            border: 4px double white;
+            max-width: 85%;
+            box-shadow: 0 0 50px rgba(0,0,0,0.3);
+            animation: winPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes winPop {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        button {
+            background: var(--lemon);
+            border: none;
+            padding: 15px 40px;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #c4c700;
+            margin-top: 25px;
+            color: #333;
+        }
+
+        button:active { transform: translateY(3px); box-shadow: none; }
+    </style>
+</head>
+<body>
+
+    <div id="hearts-bg"></div>
+
+    <h1>ОХОТА НА ТЕДЖУ! 🍓</h1>
+    <div class="score">Твоя любовь: <span id="score">0</span> / 10</div>
+    
+    <div id="game-container">
+        <img src="тэджу.png" id="taeju" alt="теджу">
+    </div>
+
+    <div id="win-screen">
+        <div class="win-content">
+    <h2 style="font-size: 45px; margin: 0; color: #fbff00; text-shadow: 2px 2px 0px #000;">ОООО ДААА, ДЕТКА! 🎉</h2>
+    <p style="font-size: 22px; line-height: 1.5; margin-top: 20px;">
+        ты приручила этого шалунишку теджу)), но настоящий приз тут только один — и это я~))))) (твой самый сочный лимончик оу йессс 🍋).<br><br>
+        моя нереальная монголочка, пусть в этот день все 2D-папочки мира завидуют тому, какая ты ослепительная.<br><br>
+        я бы охотилась за твоей улыбкой вечно, потому что ты — мой самый редкий и дорогой артефактик. оу йесссссс!<br><br>
+        <b>ТЕДЖУ В МАНХВЕ, ТОДЖИ В АНИМЕ, А Я — ТВОЙ ХЭППИ-ЭНД! ОУ ЕССС!</b>
+    </p>
+    <button onclick="location.reload()">ЕЩЕ РАЗ ДЛЯ КАЙФА!</button>
+</div>
+    </div>
+
+    <script>
+        const taeju = document.getElementById('taeju');
+        const scoreElement = document.getElementById('score');
+        const winScreen = document.getElementById('win-screen');
+        const container = document.getElementById('game-container');
+        let score = 0;
+
+        const bg = document.getElementById('hearts-bg');
+        const emojis = ['🍓','🍋','💜','✨']; // Добавили фиолетовое сердечко
+        for(let i=0; i<25; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'bg-heart';
+            heart.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDelay = Math.random() * 10 + 's';
+            bg.appendChild(heart);
+        }
+
+        function moveTaeju() {
+            const maxX = container.clientWidth - 130;
+            const maxY = container.clientHeight - 130;
+            const x = Math.max(0, Math.random() * maxX);
+            const y = Math.max(0, Math.random() * maxY);
+            taeju.style.left = x + 'px';
+            taeju.style.top = y + 'px';
+        }
+
+        taeju.addEventListener('click', (e) => {
+            score++;
+            scoreElement.innerText = score;
+            
+            for(let i=0; i<6; i++) {
+                const el = document.createElement('div');
+                el.innerText = ['🍋','🍓','💜'][Math.floor(Math.random()*3)];
+                el.style.position = 'fixed';
+                el.style.left = e.clientX + 'px';
+                el.style.top = e.clientY + 'px';
+                el.style.fontSize = '40px';
+                el.style.pointerEvents = 'none';
+                el.style.transition = 'all 0.8s ease-out';
+                document.body.appendChild(el);
+
+                const destX = (Math.random() - 0.5) * 400;
+                const destY = (Math.random() - 0.5) * 400;
+
+                setTimeout(() => {
+                    el.style.transform = `translate(${destX}px, ${destY}px) rotate(360deg)`;
+                    el.style.opacity = '0';
+                }, 50);
+                setTimeout(() => el.remove(), 800);
+            }
+
+            if (score >= 10) {
+                setTimeout(() => { winScreen.style.display = 'flex'; }, 200);
+            } else {
+                moveTaeju();
+            }
+        });
+
+        window.onload = moveTaeju;
+        if (taeju.complete) moveTaeju();
+    </script>
+</body>
+</html>
